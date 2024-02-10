@@ -69,7 +69,7 @@ The supported parameters are:
 * `color=..` to change the text color. eg. `color=red` or `color=#ff0000`
 * `font=..` to change the text font. eg. `font=UbuntuMono-Bold`
 * `size=..` to change the text size. eg. `size=12`
-* `shell=..` to make the item run a given script terminal with your script e.g. `shell=/Users/user/xbar_Plugins/scripts/nginx.restart.sh` if there are spaces in the file path you will need quotes e.g. `shell="/Users/user/xbar Plugins/scripts/nginx.restart.sh"` (`bash` is also supported but is deprecated)
+* `shell=..` to make the item run a given script terminal with your script (e.g. `shell="/Users/user/xbar Plugins/scripts/nginx.restart.sh"`, or `shell="\"$(realpath $0)\""` to call itself)
 * `param1=` to specify arguments to the script. Additional params like this `param2=foo param3=bar`
 * * For example `shell="/Users/user/xbar_Plugins/scripts/nginx.restart.sh" param1=--verbose` assuming that nginx.restart.sh is executable or `shell=/usr/bin/ruby param1=/Users/user/rubyscript.rb param2=arg1 param3=arg2` if script is not executable
 * `terminal=..` start bash script without opening Terminal. `true` or `false`
@@ -82,6 +82,7 @@ The supported parameters are:
 * `image=..` set an image for this item. The image data must be passed as base64 encoded string. Use a 144 DPI resolution to support Retina displays. The imageformat can be any of the formats supported by Mac OS X
 * `emojize=false` will disable parsing of github style `:mushroom:` into :mushroom:
 * `ansi=false` turns off parsing of ANSI codes.
+* `disabled=true` greyed out the line and disable click
 
 ### Metadata
 
@@ -224,7 +225,7 @@ Anything that can write to standard out is supported, but here is a list that ha
 1. Python3
    - Status: Working
    - Output: `print("your string here")`
-   - Caveats: To output unicode shebang has to be in the format `#!/usr/bin/env PYTHONIOENCODING=UTF-8 /path/to/the/python3`
+   - Caveats: To output unicode shebang has to be in the format `#!/usr/bin/env python3`
 1. JavaScript (`node`)
    - Status: Working
    - Caveats: Shebang has to be in the format `#!/usr/bin/env /path/to/the/node/executable`
@@ -234,6 +235,16 @@ Anything that can write to standard out is supported, but here is a list that ha
       - There may be a better way to run JavaScript files.
    - Tips:
       - Use the Node.js [`bitbar` module](https://github.com/sindresorhus/bitbar) to simplify plugin creation.
+1. JavaScript/Typescript (`deno`)
+   - Status: Working
+   - Caveats: 
+      - Shebang has to be in the format `#!/usr/bin/env -S -P/${HOME}/.deno/bin:/usr/local/bin:/opt/homebrew/bin deno run <permissions>`
+      - Shebang will work for standard deno installations
+   - Output: `console.log("your string here")`
+   - Notes:
+      - `process.stdout.write` doesn't output desired text.
+   - Tips:
+      - Use the deno [`xbar` module](https://deno.land/x/xbar@v2.0.0) to simplify plugin creation.
 1. CoffeeScript (`coffee`)
    - Status: Working
    - Caveats:

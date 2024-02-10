@@ -1,5 +1,4 @@
-#!/usr/bin/env PYTHONIOENCODING=UTF-8 /usr/bin/python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # <xbar.title>Weather - OpenWeatherMap</xbar.title>
 # <xbar.version>v1.3</xbar.version>
@@ -8,6 +7,7 @@
 # <xbar.desc>Grabs simple weather information from openweathermap. Needs configuration for location and API key.</xbar.desc>
 # <xbar.image>https://poolis.github.io/bitbar-plugins/open-weather-preview.png</xbar.image>
 # <xbar.dependencies>python,emoji</xbar.dependencies>
+# <xbar.var>string(VAR_LOCATION="Buenos Aires, AR"): Your location in the format: city name, country code.</xbar.var>
 
 import emoji
 import json
@@ -15,12 +15,13 @@ from urllib.request import urlopen
 from urllib.error import URLError
 from random import randint
 import datetime
+import os
 
-location_name = 'London,GB'
+location_name = "{0}".format(os.getenv('VAR_LOCATION')).replace(" ", "%20")
+
 api_key = '8b4824b451d5db1612156837df880f55'
 units = 'imperial'  # kelvin, metric, imperial
 lang = 'en'
-
 
 def get_wx():
     if api_key == "":
@@ -90,6 +91,7 @@ def render_wx():
     emojiweather = emoji.emojize(emoji_dict[weather_data['id']])
 
     emoji_t = '' + emojiweather + weather_data['temperature'] + weather_data['unit']
+    return emoji_t
     condi = [x.capitalize() for x in weather_data['condition'].split(' ')]
     daily_forecast_encoded = '\n'
     for daily_forecast in weather_data['daily_forecast']:

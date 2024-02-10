@@ -13,7 +13,10 @@
 # ---  BEGIN CONFIG  ---
 # ----------------------
 
-# https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
+# Create your Personal Access Token here https://github.com/settings/tokens
+# The token needs the following permissions:
+# - repo - Full control of private repositories
+# (See also https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/)
 ACCESS_TOKEN = ''
 
 # (required) Your GitHub login https://github.com/<login>
@@ -119,7 +122,7 @@ if __name__ == '__main__':
 
     for pr in [r['node'] for r in response['edges']]:
         labels = [l['name'] for l in pr['labels']['nodes']]
-        title = '%s - %s' % (pr['repository']['nameWithOwner'], pr['title'])
+        title = '%s - %s' % (pr['repository']['nameWithOwner'], pr['title'].replace('|', '-'))
         title_color = colors.get('inactive' if WIP_LABEL in labels else 'title')
         subtitle = '#%s opened on %s by @%s' % (
             pr['number'], parse_date(pr['createdAt']), pr['author']['login'])
